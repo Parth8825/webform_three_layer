@@ -1,0 +1,6 @@
+C:\Users\parth\Documents\GitHub\webform_three_layer\WebFormThreeLayer\BusinessObject\bin\Debug\BusinessObject.dll
+C:\Users\parth\Documents\GitHub\webform_three_layer\WebFormThreeLayer\BusinessObject\bin\Debug\BusinessObject.pdb
+C:\Users\parth\Documents\GitHub\webform_three_layer\WebFormThreeLayer\BusinessObject\obj\Debug\BusinessObject.csproj.AssemblyReference.cache
+C:\Users\parth\Documents\GitHub\webform_three_layer\WebFormThreeLayer\BusinessObject\obj\Debug\BusinessObject.csproj.CoreCompileInputs.cache
+C:\Users\parth\Documents\GitHub\webform_three_layer\WebFormThreeLayer\BusinessObject\obj\Debug\BusinessObject.dll
+C:\Users\parth\Documents\GitHub\webform_three_layer\WebFormThreeLayer\BusinessObject\obj\Debug\BusinessObject.pdb
