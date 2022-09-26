@@ -22,5 +22,30 @@ namespace BusinessLogic
                 return 0;
             }
         }
+        public int UpdateOrder(OrderBO order)
+        {
+            try
+            {
+                OrderDA dataAccess = new OrderDA();
+                return dataAccess.UpdateOrder(order);
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        public int DeleteOrder(OrderBO order)
+        {
+            try
+            {
+                OrderDA dataAccess = new OrderDA();
+                return dataAccess.DeleteOrder(order);
+            }
+            catch
+            {
+                return 0;
+            }
+        }
     }
 }
