@@ -12,16 +12,17 @@ namespace DataAccess
 {
     public class SalesmanDA
     {
-        SqlConnection _connection = new SqlConnection(ConfigurationManager.ConnectionStrings["SampleConnectionString"].ConnectionString);
+        private string _connectionString = ConfigurationManager.ConnectionStrings["InventoryConnectionString"].ConnectionString;
         public int InsertSalesman(SalesmanBO salesman)
         {
+            SqlConnection connection = new SqlConnection(_connectionString);
             try
             {
                 var query = $"insert into salesman(salesman_id, name, city, commission) values({salesman.SalesmanId},'{salesman.SalesmanName}','{salesman.City}',{salesman.Commision});";
-                _connection.Open();
-                SqlCommand cmd = new SqlCommand(query, _connection);
+                connection.Open();
+                SqlCommand cmd = new SqlCommand(query, connection);
                 int result = cmd.ExecuteNonQuery();
-                cmd.Dispose();
+                //cmd.Dispose();
                 return result;
             }
             catch
@@ -30,8 +31,53 @@ namespace DataAccess
             }
             finally
             {
-                _connection.Close();
+                connection.Close();
             }
         }
+
+        public int UpdateSalesman(SalesmanBO salesman)
+        {
+            SqlConnection connection = new SqlConnection(_connectionString);
+            try
+            {
+                var query = $"update salesman Set name = '{salesman.SalesmanName}', city = '{salesman.City}', commission = {salesman.Commision} where salesman_id = {salesman.SalesmanId};";
+                connection.Open();
+                SqlCommand cmd = new SqlCommand(query, connection);
+                int result = cmd.ExecuteNonQuery();
+                //cmd.Dispose();
+                return result;
+            }
+            catch
+            {
+                return 0;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
+        public int DeleteSalesman(SalesmanBO salesman)
+        {
+            SqlConnection connection = new SqlConnection(_connectionString);
+            try
+            {
+                var query = $"delete salesman where salesman_id = {salesman.SalesmanId};";
+                connection.Open();
+                SqlCommand cmd = new SqlCommand(query, connection);
+                int result = cmd.ExecuteNonQuery();
+                //cmd.Dispose();
+                return result;
+            }
+            catch
+            {
+                return 0;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
     }
 }

@@ -22,5 +22,31 @@ namespace BusinessLogic
                 return 0;
             }
         }
+
+        public int UpdateSalesman(SalesmanBO salesman)
+        {
+            try
+            {
+                SalesmanDA dataAccess = new SalesmanDA();
+                return dataAccess.UpdateSalesman(salesman);
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        public int DeleteSalesman(SalesmanBO salesman)
+        {
+            try
+            {
+                SalesmanDA dataAccess = new SalesmanDA();
+                return dataAccess.DeleteSalesman(salesman);
+            }
+            catch
+            {
+                return 0;
+            }
+        }
     }
 }
