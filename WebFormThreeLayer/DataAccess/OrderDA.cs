@@ -20,9 +20,10 @@ namespace DataAccess
 
             try
             {
-                var query = $"INSERT INTO orders(order_no, purch_amt, ord_date, customer_id, salesman_id) VAlUES({order.OrderNo}, {order.PurchAmt}, '{order.OrderDate.Date}', {order.CustomerId}, {order.SalesmanId});";
+                var query = $"INSERT INTO orders(order_no, purch_amt, ord_date, customer_id, salesman_id) VAlUES(@OrderNo, {order.PurchAmt}, '{order.OrderDate.Date}', {order.CustomerId}, {order.SalesmanId});";
                 connection.Open();
                 SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.Parameters.AddWithValue("@OrderNo", order.OrderNo);
                 int result = cmd.ExecuteNonQuery();
                 cmd.Dispose();
                 return result;
@@ -42,9 +43,10 @@ namespace DataAccess
             SqlConnection connection = new SqlConnection(_connectionString);
             try
             {
-                var query = $"update orders Set purch_amt={order.PurchAmt}, ord_date={order.OrderDate}, customer_id={order.CustomerId}, salesman_id={order.SalesmanId} where order_no = {order.OrderNo};";
+                var query = $"update orders Set purch_amt={order.PurchAmt}, ord_date={order.OrderDate}, customer_id={order.CustomerId}, salesman_id={order.SalesmanId} where order_no = @OrderNo ;";
                 connection.Open();
                 SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.Parameters.AddWithValue("@OrderNo", order.OrderNo);
                 int result = cmd.ExecuteNonQuery();
                 //cmd.Dispose();
                 return result;
@@ -64,9 +66,10 @@ namespace DataAccess
             SqlConnection connection = new SqlConnection(_connectionString);
             try
             {
-                var query = $"delete orders where order_no = {order.OrderNo};";
+                var query = $"delete orders where order_no = @OrderNo;";
                 connection.Open();
                 SqlCommand cmd = new SqlCommand(query, connection);
+                cmd.Parameters.AddWithValue("@OrderNo", order.OrderNo);
                 int result = cmd.ExecuteNonQuery();
                 //cmd.Dispose();
                 return result;
