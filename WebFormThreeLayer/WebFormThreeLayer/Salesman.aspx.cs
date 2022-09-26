@@ -12,6 +12,7 @@ using System.Configuration;
 using System.Web.Services.Description;
 using DataAccess;
 using System.Xml.Linq;
+using System.Security.Cryptography;
 
 namespace WebFormThreeLayer
 {
@@ -26,7 +27,6 @@ namespace WebFormThreeLayer
             }
         }
 
-        public enum MessageType { Success, Error, Info, Warning };
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
             try
@@ -51,17 +51,17 @@ namespace WebFormThreeLayer
                 string key = "Success";
                 if (result == 0)
                 {
-                    message = "ERROR!!!!! failed to insert new salesman data.";
+                    message = "ERROR!!!!! failed to insert new Salesman data.";
                     key = "Error";
                 }
                 IfCondition(result,message, key);
             }
             catch(FormatException)
             {
-                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Message", "swal('warning', 'Please enter the value', 'warning')", true);
-
+                string emptyMessage = "Please enter the value";
+                string emptyKey = "Warning";
+                MessageBox(emptyMessage, emptyKey);
             }
-
         }
 
         protected void btnUpdate_Click(object sender, EventArgs e)
@@ -96,10 +96,11 @@ namespace WebFormThreeLayer
             }
             catch(FormatException)
             {
-                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Message", "swal('warning', 'Please enter the value', 'warning')", true);
+                string emptyMessage = "Please enter the value";
+                string emptyKey = "Warning";
+                MessageBox(emptyMessage, emptyKey);
 
-            }
-            
+            } 
         }
 
         protected void btnDelete_Click(object sender, EventArgs e)
@@ -117,7 +118,7 @@ namespace WebFormThreeLayer
                 var result = businessLogic.DeleteSalesman(salesman);
 
                 string message = "Salesman details have been successfully deleted.";
-                string key = "Success";
+                string key = "Delete";
                 if (result == 0)
                 {
                     message = "ERROR!!!!! failed to delete salesman data.";
@@ -127,9 +128,10 @@ namespace WebFormThreeLayer
             }
             catch (FormatException)
             {
-                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), "Message", "swal('warning', 'Please enter the value', 'warning')", true);
+                string emptyMessage = "Please enter the value";
+                string emptyKey = "Warning";
+                MessageBox(emptyMessage, emptyKey);
             }
-
         }
 
         private void BindGridView()
@@ -165,12 +167,12 @@ namespace WebFormThreeLayer
             if (ifResult > 0)
             {
                 BindGridView();
-                DataSaveMessage(ifMessage, messageKey);
+                MessageBox(ifMessage, messageKey);
                 ClearFormFields();
             }
             else
             {
-                DataSaveMessage(ifMessage, messageKey);
+                MessageBox(ifMessage, messageKey);
                 ClearFormFields(); 
             }
         }
@@ -184,7 +186,7 @@ namespace WebFormThreeLayer
             txtID.Focus();
         }
 
-        private void DataSaveMessage(string message, string key)
+        private void MessageBox(string message, string key)
         {
             //Display success message.
 
@@ -194,6 +196,13 @@ namespace WebFormThreeLayer
                 script += message;
                 script += "', 'success')";
                 ScriptManager.RegisterClientScriptBlock(this, this.GetType(), key, script, true);
+            } 
+            else if (key == "Delete")
+            {
+                string script = "swal('Deleted','";
+                script += message;
+                script += "', 'error')";
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), key, script, true);
             }
             else if(key == "Error")
             {
@@ -201,6 +210,14 @@ namespace WebFormThreeLayer
                 script += message;
                 script += "', 'error')";
                 ScriptManager.RegisterClientScriptBlock(this, this.GetType(), key, script, true);
+            }
+            else if(key == "Warning")
+            {
+                string script = "swal('Empty!!','";
+                script += message;
+                script += "', 'warning')";
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), key ,script, true);
+
             }
         }
     }

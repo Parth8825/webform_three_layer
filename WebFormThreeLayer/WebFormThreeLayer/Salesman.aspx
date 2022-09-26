@@ -38,12 +38,12 @@
                 <div class="col-sm-10">
                     <asp:Button CssClass="btn btn-primary" ID="btnSubmit" runat="server" OnClick="btnSubmit_Click" Text="Enter Salesman"></asp:Button>
                     &nbsp;&nbsp;
-            <asp:Button CssClass="btn btn-primary" ID="btnUpdate" runat="server" OnClick="btnUpdate_Click" Text="Update" />
+                    <asp:Button CssClass="btn btn-primary" ID="btnUpdate" runat="server" OnClick="btnUpdate_Click" Text="Update" />
                     &nbsp;<br />
                     <br />
                     Salesman Id &nbsp;<asp:TextBox ID="txtDeleteId" runat="server" Height="18px"></asp:TextBox>
                     &nbsp;
-            <asp:Button CssClass="btn btn-primary" ID="btnDelete" runat="server" OnClick="btnDelete_Click" Text="Delete" />
+                    <asp:Button CssClass="btn btn-primary" ID="btnDelete" runat="server" OnClick="btnDelete_Click" Text="Delete" />
                     <br />
                     &nbsp;
                 </div>
