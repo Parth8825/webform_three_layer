@@ -69,13 +69,22 @@ namespace WebFormThreeLayer
         protected global::System.Web.UI.WebControls.TextBox txtGrade;
 
         /// <summary>
-        /// txtSalesId control.
+        /// dlSalesmanId control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtSalesId;
+        protected global::System.Web.UI.WebControls.DropDownList dlSalesmanId;
+
+        /// <summary>
+        /// SqlDataSource2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.SqlDataSource SqlDataSource2;
 
         /// <summary>
         /// btnSubmit control.

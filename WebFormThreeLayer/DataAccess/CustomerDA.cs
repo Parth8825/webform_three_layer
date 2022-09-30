@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
@@ -13,15 +14,43 @@ namespace DataAccess
     public class CustomerDA
     {
         private string _connectionString = ConfigurationManager.ConnectionStrings["InventoryConnectionString"].ConnectionString;
+
+        public int GetCustomerData(DataTable DT)
+        {
+            SqlConnection connection = new SqlConnection(_connectionString);
+            try
+            {
+                connection.Open();
+                var query = "select * from customer;";
+                SqlCommand cmd = new SqlCommand(query, connection);
+
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.Fill(DT);
+                return DT.Rows.Count;
+            }
+            catch
+            {
+                return 0;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
         public int InsertCustomer(CustomerBO customer)
         {
             SqlConnection connection = new SqlConnection(_connectionString);
             try
             {
-                var query = $"insert into customer(customer_id, cust_name, city, grade, salesman_id) values( @CustomerId, '{customer.CustomerName}', '{customer.City}', {customer.Grade}, {customer.SalesId});";
+                SqlCommand cmd = new SqlCommand("sp_InsertCustomer", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@customerId", SqlDbType.Int).Value = customer.CustomerId;
+                cmd.Parameters.Add("@custName", SqlDbType.VarChar).Value = customer.CustomerName;
+                cmd.Parameters.Add("@city", SqlDbType.VarChar).Value = customer.City;
+                cmd.Parameters.Add("@grade", SqlDbType.Int).Value = customer.Grade;
+                cmd.Parameters.Add("@salesmanId", SqlDbType.Int).Value = customer.SalesId;
                 connection.Open();
-                SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@CustomerId", customer.CustomerId);
                 int result = cmd.ExecuteNonQuery();
                 //cmd.Dispose();
                 return result;
@@ -40,11 +69,15 @@ namespace DataAccess
         {
             SqlConnection connection = new SqlConnection(_connectionString);
             try
-            {
-                var query = $"update customer set cust_name = '{customer.CustomerName}', city='{customer.City}', grade={customer.Grade}, salesman_id={customer.CustomerId} where customer_id= @CustomerId ;";
+            { 
+                SqlCommand cmd = new SqlCommand("sp_UpdateCustomer", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@customerId", SqlDbType.Int).Value = customer.CustomerId;
+                cmd.Parameters.Add("@custName", SqlDbType.VarChar).Value = customer.CustomerName;
+                cmd.Parameters.Add("@city", SqlDbType.VarChar).Value = customer.City;
+                cmd.Parameters.Add("@grade", SqlDbType.Int).Value = customer.Grade;
+                cmd.Parameters.Add("@salesmanId", SqlDbType.Int).Value = customer.SalesId;
                 connection.Open();
-                SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@CustomerId", customer.CustomerId);
                 int result = cmd.ExecuteNonQuery();
                 //cmd.Dispose();
                 return result;
@@ -64,10 +97,10 @@ namespace DataAccess
             SqlConnection connection = new SqlConnection(_connectionString);
             try
             {
-                var query = $"delete customer where customer_id= @CustomerId ;";
+                SqlCommand cmd = new SqlCommand("sp_DeleteCustomer", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@customerId", SqlDbType.Int).Value = customer.CustomerId;
                 connection.Open();
-                SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@CustomerId", customer.CustomerId);
                 int result = cmd.ExecuteNonQuery();
                 //cmd.Dispose();
                 return result;

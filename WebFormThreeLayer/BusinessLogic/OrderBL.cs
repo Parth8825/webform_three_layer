@@ -2,6 +2,7 @@
 using DataAccess;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,6 +11,19 @@ namespace BusinessLogic
 {
     public class OrderBL
     {
+        public int OrderDate(DataTable DT)
+        {
+            try
+            {
+                OrderDA dataAccess = new OrderDA();
+                return dataAccess.GetOrderData(DT);
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
         public int InsertNewOrder(OrderBO newOrder)
         {
             try
