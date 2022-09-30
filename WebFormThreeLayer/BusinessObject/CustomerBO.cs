@@ -12,7 +12,7 @@ namespace BusinessObject
         private int _CustomerId;
         private string _CustomerName;
         private string _City;
-        private double _Grade;
+        private int _Grade;
         private int _SalesId;
 
         //Get Set values
@@ -36,7 +36,7 @@ namespace BusinessObject
             }
         }
 
-        public double Grade
+        public int Grade
         {
             get { return _Grade; }
             set

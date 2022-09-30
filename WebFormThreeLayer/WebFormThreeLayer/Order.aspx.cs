@@ -15,7 +15,6 @@ namespace WebFormThreeLayer
 {
     public partial class Order : System.Web.UI.Page
     {
-        private string _connectionString = ConfigurationManager.ConnectionStrings["InventoryConnectionString"].ConnectionString;
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!Page.IsPostBack)
@@ -29,10 +28,10 @@ namespace WebFormThreeLayer
             try
             {
                 int orderNo = int.Parse(txtOrderNo.Text);
-                double purchAmt = double.Parse(txtPurchAmt.Text);
+                decimal purchAmt = decimal.Parse(txtPurchAmt.Text);
                 DateTime orderDate = Convert.ToDateTime(txtOrderDate.Text);
-                int customerId = int.Parse(txtCustId.Text);
-                int salesmanId = int.Parse(txtSalsId.Text);
+                int customerId = int.Parse(dlCustId.Text);
+                int salesmanId = int.Parse(dlSalesmanId.Text);
 
                 OrderBO newOrder = new OrderBO()
                 {
@@ -68,10 +67,10 @@ namespace WebFormThreeLayer
             try
             {
                 int orderNo = int.Parse(txtOrderNo.Text);
-                double purchAmt = double.Parse(txtPurchAmt.Text);
+                decimal purchAmt = decimal.Parse(txtPurchAmt.Text);
                 DateTime orderDate = Convert.ToDateTime(txtOrderDate.Text);
-                int customerId = int.Parse(txtCustId.Text);
-                int salesmanId = int.Parse(txtSalsId.Text);
+                int customerId = int.Parse(dlCustId.Text);
+                int salesmanId = int.Parse(dlSalesmanId.Text);
 
                 OrderBO order = new OrderBO()
                 {
@@ -136,20 +135,16 @@ namespace WebFormThreeLayer
         }
         private void BindGridView()
         {
-            SqlConnection connection = new SqlConnection(_connectionString);
             try
             {
-                connection.Open();
-                var query = "select * from orders;";
-                SqlCommand cmd = new SqlCommand(query, connection);
-                DataTable DT = new DataTable();
+                DataTable dt = new DataTable();
 
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                adapter.Fill(DT);
+                OrderBL businessLogic = new OrderBL();
+                var result = businessLogic.OrderDate(dt);
 
-                if (DT.Rows.Count > 0)
+                if (result > 0)
                 {
-                    gvOrder.DataSource = DT;
+                    gvOrder.DataSource = dt;
                     gvOrder.DataBind();
                 }
             }
@@ -158,16 +153,15 @@ namespace WebFormThreeLayer
                 string message = ex.Message;
                 throw new Exception(message, ex);
             }
-            finally { connection.Close(); }
 
         }
         private void ClearFormFields()
         {
-            txtCustId.Text = "";
+            dlCustId.SelectedIndex= 0;
             txtOrderDate.Text = "";
             txtOrderNo.Text = "";
             txtPurchAmt.Text = "";
-            txtSalsId.Text = "";
+            dlSalesmanId.SelectedIndex = 0;
             txtDeleteId.Text = "";
             txtOrderNo.Focus();
         }

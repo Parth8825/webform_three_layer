@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
@@ -14,16 +15,43 @@ namespace DataAccess
     {
         private string _connectionString = ConfigurationManager.ConnectionStrings["InventoryConnectionString"].ConnectionString;
 
+        public int GetOrderData(DataTable DT)
+        {
+            SqlConnection connection = new SqlConnection(_connectionString);
+            try
+            {
+                connection.Open();
+                var query = "select * from orders;";
+                SqlCommand cmd = new SqlCommand(query, connection);
+
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.Fill(DT);
+                return DT.Rows.Count;
+            }
+            catch
+            {
+                return 0;
+            }
+            finally
+            {
+                connection.Close();
+            }
+        }
+
         public int InsertOrder(OrderBO order)
         {
             SqlConnection connection = new SqlConnection(_connectionString);
 
             try
             {
-                var query = $"INSERT INTO orders(order_no, purch_amt, ord_date, customer_id, salesman_id) VAlUES(@OrderNo, {order.PurchAmt}, '{order.OrderDate.Date}', {order.CustomerId}, {order.SalesmanId});";
+                SqlCommand cmd = new SqlCommand("sp_InsertOrder", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@orderno", SqlDbType.Int).Value = order.OrderNo;
+                cmd.Parameters.Add("@purchAmt", SqlDbType.Decimal).Value = order.PurchAmt;
+                cmd.Parameters.Add("@orderDate", SqlDbType.Date).Value = order.OrderDate;
+                cmd.Parameters.Add("@customerId", SqlDbType.Int).Value = order.CustomerId;
+                cmd.Parameters.Add("@salesmanId", SqlDbType.Int).Value = order.SalesmanId;
                 connection.Open();
-                SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@OrderNo", order.OrderNo);
                 int result = cmd.ExecuteNonQuery();
                 cmd.Dispose();
                 return result;
@@ -43,10 +71,14 @@ namespace DataAccess
             SqlConnection connection = new SqlConnection(_connectionString);
             try
             {
-                var query = $"update orders Set purch_amt={order.PurchAmt}, ord_date={order.OrderDate}, customer_id={order.CustomerId}, salesman_id={order.SalesmanId} where order_no = @OrderNo ;";
+                SqlCommand cmd = new SqlCommand("sp_UpdateOrder", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@orderNo", SqlDbType.Int).Value = order.OrderNo;
+                cmd.Parameters.Add("@purchAmt", SqlDbType.Decimal).Value = order.PurchAmt;
+                cmd.Parameters.Add("@orderDate", SqlDbType.Date).Value = order.OrderDate;
+                cmd.Parameters.Add("@customerId", SqlDbType.Int).Value = order.CustomerId;
+                cmd.Parameters.Add("@salesmanId", SqlDbType.Int).Value = order.SalesmanId;
                 connection.Open();
-                SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@OrderNo", order.OrderNo);
                 int result = cmd.ExecuteNonQuery();
                 //cmd.Dispose();
                 return result;
@@ -66,10 +98,10 @@ namespace DataAccess
             SqlConnection connection = new SqlConnection(_connectionString);
             try
             {
-                var query = $"delete orders where order_no = @OrderNo;";
+                SqlCommand cmd = new SqlCommand("sp_DeleteOrder", connection);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@orderNo", SqlDbType.Int).Value = order.OrderNo;
                 connection.Open();
-                SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@OrderNo", order.OrderNo);
                 int result = cmd.ExecuteNonQuery();
                 //cmd.Dispose();
                 return result;

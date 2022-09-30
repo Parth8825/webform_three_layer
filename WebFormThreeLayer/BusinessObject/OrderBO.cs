@@ -10,7 +10,7 @@ namespace BusinessObject
     {
         // Declaring Order variables
         private int _orderNo;
-        private double _purchAmt;
+        private decimal _purchAmt;
         private DateTime _orderDate;
         private int _customerId;
         private int _salesmanId;
@@ -21,7 +21,7 @@ namespace BusinessObject
             get { return _orderNo; }
             set { _orderNo = value; }
         }
-        public double PurchAmt
+        public decimal PurchAmt
         {
             get { return _purchAmt; }
             set { _purchAmt = value; }

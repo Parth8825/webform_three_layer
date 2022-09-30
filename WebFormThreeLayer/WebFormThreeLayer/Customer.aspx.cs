@@ -31,8 +31,8 @@ namespace WebFormThreeLayer
                 int custId = int.Parse(txtCustID.Text);
                 string custName = txtCustName.Text;
                 string city = txtCity.Text;
-                double grade = double.Parse(txtGrade.Text);
-                int salesId = int.Parse(txtSalesId.Text);
+                int grade = int.Parse(txtGrade.Text);
+                int salesId = int.Parse(dlSalesmanId.Text);
 
                 CustomerBO newCustomer = new CustomerBO()
                 {
@@ -71,8 +71,8 @@ namespace WebFormThreeLayer
                 int custId = int.Parse(txtCustID.Text);
                 string custName = txtCustName.Text;
                 string city = txtCity.Text;
-                double grade = double.Parse(txtGrade.Text);
-                int salesId = int.Parse(txtSalesId.Text);
+                int grade = int.Parse(txtGrade.Text);
+                int salesId = int.Parse(dlSalesmanId.Text);
 
                 CustomerBO newCustomer = new CustomerBO()
                 {
@@ -121,7 +121,7 @@ namespace WebFormThreeLayer
                 string key = "Delete";
                 if (result == 0)
                 {
-                    message = "ERROR!!!!! failed to insert new Customer data.";
+                    message = "ERROR!!!!! failed to delete Customer data.";
                     key = "Error";
                 }
                 IfCondition(result, message, key);
@@ -139,17 +139,14 @@ namespace WebFormThreeLayer
             SqlConnection connection = new SqlConnection(_connectionString);
             try
             {
-                connection.Open();
-                var query = "select * from customer;";
-                SqlCommand cmd = new SqlCommand(query, connection);
-                DataTable DT = new DataTable();
+                DataTable dt = new DataTable();
 
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                adapter.Fill(DT);
+                CustomerBL businessLogic = new CustomerBL();
+                var result = businessLogic.CustomerDate(dt);
 
-                if (DT.Rows.Count > 0)
+                if (result > 0)
                 {
-                    gvCustomer.DataSource = DT;
+                    gvCustomer.DataSource = dt;
                     gvCustomer.DataBind();
                 }
             }
@@ -167,7 +164,7 @@ namespace WebFormThreeLayer
             txtCustName.Text = "";
             txtCity.Text = "";
             txtGrade.Text = "";
-            txtSalesId.Text = "";
+            dlSalesmanId.SelectedIndex = 0;
             txtDeleteId.Text = "";
             txtCustID.Focus();
 

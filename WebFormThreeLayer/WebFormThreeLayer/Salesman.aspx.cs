@@ -139,17 +139,14 @@ namespace WebFormThreeLayer
             SqlConnection connection = new SqlConnection(_connectionString);
             try
             {
-                connection.Open();
-                var query = "select * from salesman;";
-                SqlCommand cmd = new SqlCommand(query, connection);
-                DataTable DT = new DataTable();
+                DataTable dt = new DataTable();
 
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                adapter.Fill(DT);
+                SalesmanBL businessLogic = new SalesmanBL();
+                var result = businessLogic.SalesmanDate(dt);
 
-                if (DT.Rows.Count > 0)
+                if (result > 0)
                 {
-                    gvSalesman.DataSource = DT;
+                    gvSalesman.DataSource = dt;
                     gvSalesman.DataBind();
                 }
             }
