@@ -21,9 +21,22 @@ namespace WebFormThreeLayer
             if (!Page.IsPostBack)
             {
                 BindGridView();
+                DropDownListData();
             }
         }
-
+    
+        private void DropDownListData()
+        {
+            SqlConnection connection = new SqlConnection(_connectionString);
+            connection.Open();
+            SqlCommand cmd = new SqlCommand("sp_SelectCustomer", connection);
+            cmd.CommandType = CommandType.Text;
+            dlSalesmanId.DataSource = cmd.ExecuteReader();
+            dlSalesmanId.DataTextField = "salesman_id";
+            dlSalesmanId.DataValueField = "salesman_id";
+            dlSalesmanId.DataBind();
+            dlSalesmanId.Items.Insert(0, new ListItem("Please Select ID", "0"));
+        }
         protected void btnSubmit_Click(object sender, EventArgs e)
         {
             try
@@ -194,7 +207,7 @@ namespace WebFormThreeLayer
                 string script = "swal('Saved','";
                 script += message;
                 script += "', 'success')";
-                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), key, script, true);
+                ScriptManager.RegisterClientScriptBlock(this, this.GetType(), key, "s", true);
             }
             else if (key == "Delete")
             {
